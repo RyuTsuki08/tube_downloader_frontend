@@ -6,11 +6,12 @@ import Col from 'react-bootstrap/Col'
 import Stack from "react-bootstrap/Stack";
 import Button from  'react-bootstrap/Button';
 import { NavDropdown } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Navigation(props){
     return (
         <Navbar 
-        fixed="top"
+        fixed="bottom"
         expand={props.expand} 
         bg={props.theme}
         data-bs-theme={props.theme} 
@@ -30,6 +31,11 @@ export default function Navigation(props){
                 </Stack>
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
+          {/* <Button>
+          <FontAwesomeIcon icon="fa-brands fa-square-github" style={{color: "#c12525",}} />
+          </Button> */}
+          
 
         </Container>
       </Navbar>

@@ -19,7 +19,7 @@ export default function App(props) {
     <>
      {
       isMobile ?
-      <App_Desktop/>
+      <App_Desktop />
       :
       <App_mobile/>
      }
