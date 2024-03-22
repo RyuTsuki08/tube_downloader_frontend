@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ThemeProvider, Container, Row, Col, Stack } from "react-bootstrap";
+import { ThemeProvider, Container, Row, Col, Stack, Offcanvas, Spinner } from "react-bootstrap";
 import Navigation from "./components/Navbar";
 import axios from 'axios';
 import InputToUrl from "./components/inputToUrl";
@@ -9,20 +9,6 @@ import CardVideo from './components/CardToVideo';
 import Form from  'react-bootstrap/Form'
 
 export const dataContext = React.createContext()
-
-function validateUrl (url){
-    try {
-        if(url != ''){
-            let onlyVideo = url.includes('/watch')
-            let  onlyPlaylist = url.includes('/playlist' );
-            let res = url.startsWith('https://www.youtube.com/')
-            let res_obj = {msg: 'url validate correctly', error: null, success: res, playlist: onlyPlaylist, onlyVideo: onlyVideo};
-            return res_obj;
-        }
-    } catch (error) {
-        return {msg: 'error, please check url', error: e, success: false};
-    }
- }
 
 export default function App_Desktop(){
 
@@ -40,19 +26,40 @@ export default function App_Desktop(){
     const [loading, setLoading] = React.useState(false);
     const [dataLoaded, setDataLoaded] = React.useState(false)
     const [ showToast, setShowToast ] = React.useState(false);
-    const [showSpinner, setShowSpinner] = React.useState(false)
-    const [error, setError] = React.useState(false)
+    const [showSpinner, setShowSpinner] = React.useState(false);
+    const [error, setError] = React.useState(false);
 
     console.log(playlistTitle)
+
+    function validateUrl (url){
+        try {
+            if(url != ''){
+                let onlyVideo = url.includes('/watch')
+                let  onlyPlaylist = url.includes('/playlist' );
+                let res = url.startsWith('https://www.youtube.com/')
+                let res_obj = {
+                    msg: 'url validate correctly', 
+                    error: null, 
+                    success: res, 
+                    playlist: onlyPlaylist, 
+                    onlyVideo: onlyVideo};
+                return res_obj;
+            }
+        } catch (error) {
+            let messageError = {msg: 'error, please check url', error: e, success: false}
+            setMessage(messageError)
+            return messageError;
+        }
+     }
 
     function getUrl(url){
         if(url === '') {
             return 'Please enter a URL.'
         } else{
             setLoading(true)
-            if(validateUrl(url).success && validateUrl(url).onlyVideo == true){
-                const urlDownloadVideo = `http://127.0.0.1:8000/?url=${url}`;
-                axios.get(urlDownloadVideo).then((res)=>{
+            if(validateUrl(url).success == true && validateUrl(url).onlyVideo == true){
+                const urlGetVideo = `http://127.0.0.1:8000/?url=${url}`;
+                axios.get(urlGetVideo).then((res)=>{
                     console.log( res.data);
                     setVideo({
                         title:  res.data.video.tile,
@@ -96,23 +103,52 @@ export default function App_Desktop(){
     }
 
     function donwloadOnlyVideo(url){
+        setLoading(true)
             const urlDownloadVideo = typeFormat === "audio" ? `http://127.0.0.1:8000/download?url=${url}&type=${true}` : `http://127.0.0.1:8000/download?url=${url}&type=${false}`;
             axios.post(urlDownloadVideo)
             .then((res) => {
                 console.log(res.data);
+                setMessage(res.data.msg)
+                setLoading(false)
+                setShowToast(true)
+                setTimeout(()=>setShowToast(false),5000)
             }).catch((error) => {console.log(error)})
         }
 
     function downloadPlaylist(url){
-        const urlDownloadPlaylist = typeFormat === "audio" ? `http://127.0.0.1:8000/playlist?url=${url}&type=${true}` : `http://127.0.0.1:8000/playlist?url=${url}&type=${false}`;
+        setLoading(true)
+        const urlDownloadPlaylist = typeFormat === "audio" ? `http://127.0.0.1:8000/playlist-download?url=${url}&type=${true}` : `http://127.0.0.1:8000/playlist-donwload?url=${url}&type=${false}`;
         axios.post(urlDownloadPlaylist)
         .then((res) => {
             console.log(res.data);
+            setMessage(res.data.msg)
+            setLoading(false)
+            setShowToast(true)
+            setTimeout(()=>setShowToast(false),5000)
         }).catch((error) => {console.log(error)})
     }
 
     return(
         <>
+        <Offcanvas show={loading} 
+        onHide={setLoading} 
+        style={{
+            visibility: 'visible',
+            width: '100vw',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            flexWrap: 'nowrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent'
+        }}>
+            <Spinner animation="grow" variant="primary" />
+           <h5 style={{
+            color: '#fff',
+            fontSize: 'x-large'
+           }}> Loading... </h5>
+        </Offcanvas>
         <Navigation expand="lg" theme="dark" />
 
             <style type="text/css">
@@ -216,7 +252,9 @@ export default function App_Desktop(){
                                         <Button variant='danger' style={{
                                                 textAlign: 'center',
                                                 }}
-                                                onClick={(e) => {}}>
+                                                onClick={(e) => {
+                                                    downloadPlaylist(playlistTitle.url)
+                                                }}>
                                                     Download All: {playlistTitle.total_videos}
                                         </Button>
                                         </Stack>
@@ -225,7 +263,7 @@ export default function App_Desktop(){
                                             {
                                             playlist.map((video,index) => (
 
-                                                            <Col xs={6}>
+                                                            <Col xs={6} key={index}>
                                                                 <Card style={{ width: '25rem' }}>
                                                                     <Button variant='transparent'  onClick={()=>{window.open(video.url)}} >
                                                                     <Card.Img variant="top" src={video.thumbnail} width="100%"/>
@@ -240,7 +278,9 @@ export default function App_Desktop(){
                                                                             <option value="video">Video</option>
                                                                             </Form.Select>
 
-                                                                        <Button variant="primary">Download</Button>
+                                                                        <Button variant="primary" onClick={(e) => {
+                                                                            donwloadOnlyVideo(video.url)
+                                                                        }}>Download</Button>
 
                                                                         </Stack>
                                                                     </Card.Body>

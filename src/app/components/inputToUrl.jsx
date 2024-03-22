@@ -9,6 +9,8 @@ import
     Collapse,
     DropdownButton,
     Dropdown,
+    Tooltip,
+    OverlayTrigger
  } from 'react-bootstrap'
 import { dataContext } from '../App_desktop';
 
@@ -79,22 +81,23 @@ export default function InputToUrl(props){
             
         </>
 
-        <InputGroup className= "mb-3">
-            <InputGroup.Text>https://</InputGroup.Text>
-            <Form.Control type="text" placeholder="https://www.youtube.com/watch?v="
-             value={inputValue} 
-             onChange={(e) => {
-                setInputValue(e.target.value)
-                if(data.validateUrl(e.target.value).playlist){
-                    data.setPlaylistTitle({
-                        title: data.PlaylistTitle.title,
-                        total_videos: data.PLaylistTitle.total_videos,
-                        url: e.tragte.value
-                    })
-                }
-                data.getUrl(e.target.value)
-            }}/>
-        </InputGroup>
+            <OverlayTrigger
+            placement='bottom'
+            delay={{show: 250, hide: 400}}
+            overlay={<Tooltip id='input-tooltip'> You can change from playlist to song just using the url! </Tooltip>}
+            >
+
+            <InputGroup className= "mb-3">
+                <InputGroup.Text>https://</InputGroup.Text>
+                <Form.Control type="text" placeholder="https://www.youtube.com/watch?v="
+                value={inputValue} 
+                onChange={(e) => {
+                    setInputValue(e.target.value)
+                    console.log(data.validateUrl(e.target.value).playlist)
+                    data.getUrl(e.target.value)
+                }}/>
+            </InputGroup>
+        </OverlayTrigger>
         </>
     )
 }

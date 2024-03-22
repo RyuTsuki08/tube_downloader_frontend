@@ -26,7 +26,7 @@ export default function CardVideo(props){
                     <option value="video">Video</option>
                     </Form.Select>
 
-                <Button variant="primary" onClick={data.donwloadOnlyVideo(data.video.url)}>Download</Button>
+                <Button variant="primary" onClick={() => {data.donwloadOnlyVideo(data.video.url)}}>Download</Button>
 
                 </Stack>
                 
