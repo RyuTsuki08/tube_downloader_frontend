@@ -21,7 +21,9 @@ export default function CardVideo(props){
                 <Card.Body>
                 <Card.Title>{data.video.title} | {data.video.author}</Card.Title>
                 <Stack>
-                <Form.Select defaultValue={data.typeFormat} onChange={(e)=> {data.setTypeFormat(e.target.value)}}>
+                <Form.Select defaultValue={data.typeFormat} onChange={(e)=> {
+                    data.setTypeFormat(e.target.value)
+                    console.log(e.target.value)}}>
                     <option value="audio">Audio</option>
                     <option value="video">Video</option>
                     </Form.Select>

@@ -93,7 +93,6 @@ export default function InputToUrl(props){
                 value={inputValue} 
                 onChange={(e) => {
                     setInputValue(e.target.value)
-                    console.log(data.validateUrl(e.target.value).playlist)
                     data.getUrl(e.target.value)
                 }}/>
             </InputGroup>

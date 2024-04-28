@@ -20,7 +20,7 @@ export default function App_Desktop(){
         id: ''
     })
     const [playlistTitle, setPlaylistTitle] = React.useState({}) 
-    const [ typeFormat, setTypeFormat ] = React.useState("")
+    const [ typeFormat, setTypeFormat ] = React.useState("audio")
     const [playlist, setPlaylist] = React.useState()
     const [message, setMessage] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -28,8 +28,6 @@ export default function App_Desktop(){
     const [ showToast, setShowToast ] = React.useState(false);
     const [showSpinner, setShowSpinner] = React.useState(false);
     const [error, setError] = React.useState(false);
-
-    console.log(playlistTitle)
 
     function validateUrl (url){
         try {
@@ -112,12 +110,12 @@ export default function App_Desktop(){
                 setLoading(false)
                 setShowToast(true)
                 setTimeout(()=>setShowToast(false),5000)
-            }).catch((error) => {console.log(error)})
+            }).catch((error) => {console.error(error)})
         }
 
     function downloadPlaylist(url){
         setLoading(true)
-        const urlDownloadPlaylist = typeFormat === "audio" ? `http://127.0.0.1:8000/playlist-download?url=${url}&type=${true}` : `http://127.0.0.1:8000/playlist-donwload?url=${url}&type=${false}`;
+        const urlDownloadPlaylist = typeFormat === "audio" ? `http://127.0.0.1:8000/playlist-download?url=${url}&type=${true}` : `http://127.0.0.1:8000/playlist-download?url=${url}&type=${false}`;
         axios.post(urlDownloadPlaylist)
         .then((res) => {
             console.log(res.data);
@@ -125,7 +123,7 @@ export default function App_Desktop(){
             setLoading(false)
             setShowToast(true)
             setTimeout(()=>setShowToast(false),5000)
-        }).catch((error) => {console.log(error)})
+        }).catch((error) => {console.error(error)})
     }
 
     return(
