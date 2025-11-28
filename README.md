@@ -56,7 +56,7 @@ TubeDownloader Frontend es una aplicación web responsiva diseñada para ofrecer
 
 ## 📸 Capturas de Pantalla
 
-*(Añade capturas de pantalla de tu aplicación aquí para mostrar el diseño)*
+![Vista de Escritorio](public/screenshots/captura1.jpg)
 
 ## 👨‍💻 Desarrollador
 
@@ -66,7 +66,7 @@ TubeDownloader Frontend es una aplicación web responsiva diseñada para ofrecer
   <a href="https://github.com/RyuTsuki08" target="_blank">
     <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
-  <a href="https://www.linkedin.com/in/christian-paez-3b6b7b1b3/" target="_blank">
+  <a href="https://www.linkedin.com/in/christian-paez/" target="_blank">
     <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
   </a>
   <a href="https://www.instagram.com/christianpaez_/" target="_blank">
